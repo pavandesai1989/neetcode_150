@@ -1,0 +1,94 @@
+//https://neetcode.io/problems/longest-substring-without-duplicates/question
+
+***brute force***
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) 
+    {
+        int maxlen = 0;
+        int n=s.length();
+
+        for(int i=0;i<n;i++) //o(n)
+        {
+            unordered_set<char> sett; //o(num of unique characters) worst case o(n) = "abcdefg"
+            for(int j=i;j<n;j++) //o(n)
+            {
+                if(sett.find(s[j]) != sett.end())
+                {
+                    break;
+                }
+                sett.insert(s[j]);
+                maxlen = max(maxlen,j-i+1);
+            }
+        }
+        return maxlen;
+    }
+};
+
+How can i improve this?
+Your brute force does this:
+
+Fix i
+
+Expand j until duplicate found
+
+Restart from i+1
+
+So you're repeatedly recomputing overlapping substrings.
+
+If substring from i to j is valid,
+and I move j forward,
+why should I reset everything?
+
+This is where sliding window comes.
+
+********sliding window****
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) 
+    {
+        int maxlen=0;
+        //need map to store freq
+        unordered_map<char,int> freq;
+        int n=s.length();
+        int l=0,r=0;
+
+        while(r<n)
+        {
+            //add to map
+            freq[s[r]]++;
+
+            //if count >1 reduce window
+            while(freq[s[r]] > 1)
+            {
+                freq[s[l]]--;    
+                l++;
+            }
+
+            //update max
+            maxlen = max(maxlen,r-l+1);
+
+            r++;
+        }
+        return maxlen;
+    }
+};
+
+
+You are only concerned about: Whether current character s[r] appears more than once.
+
+You are NOT checking:
+
+map.size()
+
+map.count()
+
+Whether a key exists
+no need to check :                if(freq[s[l]]==0)
+                {
+                    freq.erase(s[l]);
+                }
+
+Time : o(n) and space : o(n) 
+
+*******
