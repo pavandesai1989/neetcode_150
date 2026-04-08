@@ -1,0 +1,50 @@
+https://leetcode.com/problems/combination-sum-ii/description/
+
+class Solution {
+public:
+    void helper(int idx,vector<int>& ds,int target,vector<int>& candidates,vector<vector<int>>& res)
+    {
+        if(target<0) return;
+        if(target==0)
+        {
+            res.push_back(ds);
+            return;
+        }
+
+        for(int i=idx;i<candidates.size();i++)
+        {
+            if(i>idx && candidates[i]==candidates[i-1]) continue;
+            ds.push_back(candidates[i]);
+            helper(i+1,ds,target-candidates[i],candidates,res);
+            ds.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) 
+    {
+        vector<vector<int>> res;
+        vector<int> ds;
+
+        sort(candidates.begin(),candidates.end());
+
+        helper(0,ds,target,candidates,res);
+
+        return res;
+    }
+};
+
+Combination Sum II – Backtracking Approach
+Sort candidates to handle duplicates.
+Maintain a temporary list ds and result res.
+Call recursive helper(idx, ds, target) starting from idx = 0.
+In helper:
+If target < 0 → return
+If target == 0 → push ds to res → return
+Loop from idx to end of candidates:
+If current element = previous element (and i > idx) → skip (avoid duplicates)
+Push element to ds → recurse with helper(i + 1, ds, target - candidates[i])
+Pop element from ds (backtrack)
+
+Time: O(2^N × N) (all subsets in worst case), Space: O(N) (recursion + temporary list)
+
+
+
