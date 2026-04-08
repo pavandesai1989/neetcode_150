@@ -1,0 +1,63 @@
+https://leetcode.com/problems/permutations/description/
+
+class Solution {
+public:
+    void helper(vector<int>& nums,vector<int>& ds,vector<vector<int>>& res,unordered_set<int>& sett)
+    {
+        if(ds.size() == nums.size())
+        {
+            res.push_back(ds);
+            return;
+        }
+
+        for(int i=0;i<nums.size();i++)
+        {
+           if(sett.find(nums[i]) == sett.end())
+           {
+                ds.push_back(nums[i]);
+                sett.insert(nums[i]);
+
+                helper(nums,ds,res,sett);
+
+                ds.pop_back();
+                sett.erase(nums[i]);
+           }
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) 
+    {
+        vector<vector<int>> res;
+        unordered_set<int> sett;
+        vector<int> ds;
+
+        helper(nums,ds,res,sett);
+        return res;
+    }
+};
+
+Permutations – Backtracking Approach (using set)
+•	Maintain ds (current permutation), res, and set to track used elements. 
+•	Call recursive helper(nums, ds, res, set). 
+•	In helper: 
+o	If ds.size() == nums.size() → push ds to res → return 
+o	Loop over all elements: 
+	If element not in set → choose it 
+	Push to ds, insert into set 
+	Recurse 
+	Backtrack → pop from ds, remove from set 
+Time: O(N × N!)
+Space: O(N) (recursion + set)
+One-liner: “Pick unused elements using set, build permutation, backtrack to explore all possibilities.”
+Start: ds = [], set = {}
+
+                []
+          /            \
+       pick 1         pick 2
+      ds=[1]         ds=[2]
+     set={1}        set={2}
+      /                \
+  pick 2             pick 1
+ ds=[1,2]          ds=[2,1]
+ set={1,2}         set={2,1}
+    |                 |
+  add to res       add to res
