@@ -1,0 +1,160 @@
+//https://neetcode.io/problems/longest-substring-without-duplicates/question
+
+***brute force***
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) 
+    {
+        int maxlen=0;
+        int n=s.length();
+        for(int i=0;i<n;i++)
+        {
+            unordered_map<char,int> mpp;
+            mpp[s[i]]++;
+
+            for(int j=i+1;j<n;j++)
+            {
+                if(mpp.count(s[j])) break;
+                mpp[s[j]]++;                
+            }
+            maxlen = max(maxlen,(int)mpp.size());
+        }
+        return maxlen;
+    }
+};
+ 
+
+How can i improve this?
+Your brute force does this:
+
+Fix i
+
+Expand j until duplicate found
+
+Restart from i+1
+
+So you're repeatedly recomputing overlapping substrings.
+
+If substring from i to j is valid,
+and I move j forward,
+why should I reset everything?
+
+This is where sliding window comes.
+
+********sliding window****
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) 
+    {
+        int maxlen=0;
+        //need map to store freq
+        unordered_map<char,int> freq;
+        int n=s.length();
+        int l=0,r=0;
+
+        while(r<n)
+        {
+            //add to map
+            freq[s[r]]++;
+
+            //if count >1 reduce window
+            while(freq[s[r]] > 1)
+            {
+                freq[s[l]]--;    
+                l++;
+            }
+
+            //update max
+            maxlen = max(maxlen,r-l+1);
+
+            r++;
+        }
+        return maxlen;
+    }
+};
+
+
+You are only concerned about: Whether current character s[r] appears more than once.
+
+You are NOT checking:
+
+map.size()
+
+map.count()
+
+Whether a key exists
+no need to check :                if(freq[s[l]]==0)
+                {
+                    freq.erase(s[l]);
+                }
+
+Time : o(n) and space : o(n) 
+
+Transition from Your Code → Optimal
+Your thinking:
+start fresh for every i ❌
+Improved thinking:
+keep window, adjust only when needed ✅
+
+
+s = "abcabcbb"
+
+Brute force:
+i=0 → abc
+i=1 → bc (redo work)
+i=2 → c (redo again)
+
+Sliding window:
+l=0,r=0 → a
+l=0,r=1 → ab
+l=0,r=2 → abc
+r=3 → 'a' duplicate → move l → now "bca"
+
+*******
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) 
+    {
+        int maxlen=0;
+        int n=s.length();
+        int l=0,r=0;
+
+        unordered_map<char,int> freq;
+
+        while(r<n)
+        {
+           //add char to map
+           freq[s[r]]++;
+
+           //check if occur more than 1
+           while(freq[s[r]] > 1)
+           {
+              freq[s[l]]--; //imp reduce fre of l not r
+              l++; //remove from left
+           }
+
+           //update ans
+           maxlen = max(maxlen,r-l+1);
+
+           r++;
+        }
+        return maxlen;
+    }
+};
+
+Sliding Window (Longest Substring Without Repeating Characters)
+Time Complexity
+
+👉 O(N)
+
+Each character is visited at most twice (once by r, once by l)
+Space Complexity
+
+👉 O(256) ≈ O(1) (for ASCII)
+
+Using set/map to store characters
+One-liner
+
+👉 “Each element processed at most twice → O(N)”
+
+
