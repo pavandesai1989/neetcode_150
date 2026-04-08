@@ -1,0 +1,55 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/
+
+brute force 
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) 
+    {
+        int n=prices.size();
+        int maxprofit=INT_MIN;
+        for(int i=0;i<n;i++)
+        {
+           int p=prices[i];
+           for(int j=i+1;j<n;j++)
+           {
+              if(prices[j]>prices[i])
+              {
+                 maxprofit = max(maxprofit,prices[j]-prices[i]);
+              }
+           }
+        }
+        return maxprofit == INT_MIN ? 0 : maxprofit;
+    }
+};
+
+***optimal**
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) 
+    {
+        int maxprofit=INT_MIN;
+        int mini=INT_MAX;
+
+        for(int i=0;i<prices.size();i++)
+        {
+            mini = min(mini,prices[i]);
+            maxprofit = max(maxprofit,prices[i]-mini);
+        }
+        return maxprofit;
+    }
+};
+
+Best Time to Buy and Sell Stock – Greedy Approach
+
+Maintain minimum price and max profit.
+Traverse array once.
+At each index:
+Update minimum price seen so far.
+Calculate profit = current price − minimum price.
+Update maximum profit.
+
+Key Idea
+
+Always buy at lowest price so far and sell at current day.
+
+Time: O(N), Space: O(1)
