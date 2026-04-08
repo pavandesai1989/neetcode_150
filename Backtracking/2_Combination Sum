@@ -1,0 +1,54 @@
+https://leetcode.com/problems/combination-sum/description/
+
+class Solution {
+public:
+    void helper(int idx,vector<int> ds,vector<int>& arr,int target,vector<vector<int>>& res)
+    {
+        if(idx<0) return;
+        if(target==0)
+        {
+            res.push_back(ds);
+            return;
+        }  
+
+        //not pick
+        helper(idx-1,ds,arr,target,res);
+
+        //pick
+       
+        if(arr[idx]<=target)
+        {
+            ds.push_back(arr[idx]);
+            helper(idx,ds,arr,target-arr[idx],res);
+        }
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) 
+    {
+        vector<vector<int>> res;
+        vector<int> ds;
+        int n=candidates.size();
+        helper(n-1,ds,candidates,target,res);
+        return res;
+    }
+};
+
+
+⏱️ Time Complexity
+
+👉 O(2^T × T)
+
+2^T → recursion tree (target depth)
+T → copying each combination
+📦 Space Complexity
+
+👉 O(T) (recursion stack)
+
+Depth = target / smallest element
+Skewed tree → worst case T
+🧠 One-line memory trick
+
+👉 “Exponential recursion × linear copy = O(2^T × T)”
+
+🎯 Interview one-liner
+
+Time is exponential in target → O(2^T × T), space is O(T) due to recursion depth.
