@@ -1,1 +1,67 @@
 https://leetcode.com/problems/sliding-window-maximum/description/
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) 
+    {
+        vector<int> res;
+        deque<int> dq;
+        int n=nums.size();
+
+        for(int i=0;i<k;i++)
+        {
+            while(!dq.empty() && nums[i]>=nums[dq.back()])
+            {
+                dq.pop_back();
+            }
+            dq.push_back(i); //add idx not value
+        }
+        //add 1st window ans to res
+        res.push_back(nums[dq.front()]); //front always is answer
+
+        for(int i=k;i<n;i++)
+        {
+            //check if index in queue is part of curr window
+            while(!dq.empty() && dq.front()<=i-k)
+            {
+                dq.pop_front();
+            }
+            while(!dq.empty() && nums[i]>=nums[dq.back()])
+            {
+                dq.pop_back();
+            }
+            dq.push_back(i);
+            res.push_back(nums[dq.front()]);
+        }
+        return res;
+    }
+};
+
+Maximum Sliding Window – Monotonic Deque Approach
+
+Maintain a deque dq (stores indices, not values).
+Deque is maintained in decreasing order of values.
+
+Traverse array using one pointer i.
+
+At each step:
+• Remove indices from front if they are out of window (dq.front() <= i - k).
+• Remove elements from back while nums[i] >= nums[dq.back()] (useless elements).
+• Add current index i to deque.
+• When window size ≥ k:
+o The front of deque gives max → nums[dq.front()]
+o Add it to result
+
+Key Idea
+Keep only useful candidates for maximum in deque (in decreasing order).
+
+Important Trick
+Remove all smaller elements from back because they can never become max in future.
+
+Why index not value?
+To check if element is out of window (i - k condition) and handle duplicates.
+
+Time: O(N)
+(each element added & removed at most once)
+
+Space: O(K)
