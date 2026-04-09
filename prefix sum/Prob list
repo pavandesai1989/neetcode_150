@@ -1,0 +1,114 @@
+# Prefix Sum – Must-Do Questions (Minimal Set)
+
+---
+
+## 1. Basic Prefix Sum (Range Query)
+
+**Problem:** [https://leetcode.com/problems/range-sum-query-immutable/](https://leetcode.com/problems/range-sum-query-immutable/)
+
+**Pattern:** Precompute prefix array for O(1) range queries
+
+**Core Idea:**
+
+* pref[i] = sum of elements from 0 to i
+* sum(l, r) = pref[r] - pref[l-1]
+
+---
+
+## 2. Subarray Sum Equals K ⭐ (MOST IMPORTANT)
+
+**Problem:** [https://leetcode.com/problems/subarray-sum-equals-k/](https://leetcode.com/problems/subarray-sum-equals-k/)
+
+**Pattern:** Prefix Sum + HashMap
+
+**Core Idea:**
+
+* If (prefixSum - k) exists → valid subarray
+* Use map to store frequency of prefix sums
+
+---
+
+## 3. Binary Subarrays With Sum
+
+**Problem:** [https://leetcode.com/problems/binary-subarrays-with-sum/](https://leetcode.com/problems/binary-subarrays-with-sum/)
+
+**Pattern:** Prefix Sum + HashMap / Sliding Window
+
+**Core Idea:**
+
+* Convert to subarray sum = goal
+* Same as LC 560
+
+---
+
+## 4. Subarray Sums Divisible by K ⭐
+
+**Problem:** [https://leetcode.com/problems/subarray-sums-divisible-by-k/](https://leetcode.com/problems/subarray-sums-divisible-by-k/)
+
+**Pattern:** Prefix Sum + Modulo + HashMap
+
+**Core Idea:**
+
+* If prefix[i] % k == prefix[j] % k → subarray divisible by k
+* Store frequency of remainders
+
+---
+
+## 5. Continuous Subarray Sum
+
+**Problem:** [https://leetcode.com/problems/continuous-subarray-sum/](https://leetcode.com/problems/continuous-subarray-sum/)
+
+**Pattern:** Prefix Sum + Modulo
+
+**Core Idea:**
+
+* Same remainder logic
+* Extra condition: subarray length ≥ 2
+
+---
+
+## 6. Contiguous Array ⭐
+
+**Problem:** [https://leetcode.com/problems/contiguous-array/](https://leetcode.com/problems/contiguous-array/)
+
+**Pattern:** Prefix Sum + HashMap (Transform)
+
+**Core Idea:**
+
+* Convert 0 → -1
+* Then find longest subarray with sum = 0
+
+---
+
+## 7. Maximum Subarray (Kadane)
+
+**Problem:** [https://leetcode.com/problems/maximum-subarray/](https://leetcode.com/problems/maximum-subarray/)
+
+**Pattern:** Prefix Sum Optimization
+
+**Core Idea:**
+
+* max subarray = current sum - minimum prefix so far
+* Optimized as Kadane’s Algorithm
+
+---
+
+## (Optional) 2D Prefix Sum
+
+**Problem:** [https://leetcode.com/problems/range-sum-query-2d-immutable/](https://leetcode.com/problems/range-sum-query-2d-immutable/)
+
+**Pattern:** 2D Prefix Sum (Inclusion-Exclusion)
+
+**Core Idea:**
+
+* sum of rectangle using 4 prefix values
+
+---
+
+# FINAL REVISION (1-LINERS)
+
+* Range Query → pref[r] - pref[l-1]
+* Count Subarrays → prefix + hashmap
+* Divisible → prefix % k
+* Equal 0/1 → convert 0 → -1
+* Max Subarray → Kadane
