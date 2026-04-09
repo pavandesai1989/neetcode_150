@@ -1,0 +1,88 @@
+https://leetcode.com/problems/permutation-in-string/
+
+***bruteforce**
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) 
+    {
+        int l1=s1.length();
+        int l2=s2.length();
+
+        unordered_map<char,int> m1;
+        for(auto& ele:s1)
+        {
+            m1[ele]++;
+        }
+        
+        for(int i=0;i<l2;i++)
+        {
+            unordered_map<char,int> m2;
+            for(int j=i;j<l2;j++)
+            {
+                 m2[s2[j]]++;
+
+                 if(j-i+1 == s1.length())
+                 {
+                    if(m1==m2) return true;
+                 }
+            }
+        }
+        return false;
+    }
+};
+
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) 
+    {
+        int l1=s1.length();
+        int l2=s2.length();
+        int i=0,j=0;
+
+        unordered_map<char,int> m1;
+        unordered_map<char,int> m2;
+        for(auto& ele:s1)
+        {
+            m1[ele]++;
+        }
+        
+        while(j<l2)
+        {
+            m2[s2[j]]++;
+
+            if(j-i+1 == l1)
+            {
+                if(m1==m2) return true;
+
+                m2[s2[i]]--;
+                if(m2[s2[i]]==0)
+                {
+                    m2.erase(s2[i]);//why this needed?
+                }
+                i++;
+            }
+            j++;
+        }
+        
+        
+        return false;
+    }
+};
+Permutation in String – Sliding Window Approach
+Maintain two frequency maps m1 (for s1) and m2 (for current window).
+Traverse string using two pointers (i, j).
+At each step:
+•	Add s2[j] to window (m2). 
+•	When window size equals s1.length(): 
+o	Compare m1 and m2. If equal → return true. 
+o	Remove s2[i] from window (decrement freq). 
+o	If frequency becomes 0 → erase key (for correct map comparison). 
+o	Move i forward. 
+ 
+Key Idea
+Check all substrings of size s1.length() using a sliding window and frequency matching.
+ 
+Important Trick
+Remove zero-frequency keys from map, otherwise {a:0} ≠ {} during comparison.
+ 
+Time: O(N × 26) ≈ O(N), Space: O(26) / O(N)
