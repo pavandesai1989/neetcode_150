@@ -1,0 +1,118 @@
+https://leetcode.com/problems/trapping-rain-water/description/
+
+class Solution {
+public:
+    int trap(vector<int>& height) 
+    {
+        int n=height.size();
+        int lmax=INT_MIN;
+        int rmax=INT_MIN;
+        int res=0;
+        for(int i=1;i<n-1;i++)
+        {
+            int lmax = INT_MIN;   // reset here
+            int rmax = INT_MIN;   // reset here
+           for(int j=0;j<i;j++)
+           {
+              lmax=max(lmax,height[j]);
+           }
+           for(int k=i+1;k<n;k++)
+           {
+              rmax=max(rmax,height[k]);
+           }
+
+           res += max(0,min(lmax,rmax)-height[i]);
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int trap(vector<int>& height) 
+    {
+       int n=height.size();
+       int l=0;
+       int r=n-1;
+       int res=0;
+       int lmax=INT_MIN;
+       int rmax=INT_MIN;
+
+       while(l<r)
+       {
+           lmax = max(lmax,height[l]);
+           rmax = max(rmax,height[r]);
+
+           if(lmax<rmax)
+           {
+              res += min(lmax,rmax)-height[l];
+              l++;
+           } 
+           else
+           {
+              res += min(lmax,rmax)-height[r];
+              r--;
+           }
+       }  
+       return res; 
+    }
+
+    Brute Force:
+Use a loop for each index i (excluding first and last).
+For every index, try to compute water stored at that position.
+
+At each step:
+• Find left max from 0 → i-1.
+• Find right max from i+1 → n-1.
+• Height of water = min(lmax, rmax) (smaller one limits water).
+• Water stored = min(lmax, rmax) - height[i].
+• Add to result using max(0, …) to avoid negative.
+
+Key Idea
+Water at any index is limited by the smaller of left and right maximum heights.
+
+Important Trick
+Always take min(lmax, rmax) because water spills over the shorter boundary.
+
+Important Note
+Reset lmax and rmax for every index.
+
+Time: O(N²)
+Space: O(1)
+
+
+Use two pointers l (start) and r (end).
+Maintain running maximums from both sides.
+
+At each step:
+• Update lmax = max(lmax, height[l])
+• Update rmax = max(rmax, height[r])
+• Compare lmax and rmax:
+
+If lmax < rmax → left side is limiting
+• Water = lmax - height[l]
+• Add to result
+• Move l++
+Else → right side is limiting
+• Water = rmax - height[r]
+• Add to result
+• Move r--
+
+Key Idea
+Water level is decided by the smaller of leftMax and rightMax.
+
+Important Trick
+Process the side with smaller max, because it is the bottleneck.
+
+Why it works
+If lmax < rmax, then water at l depends only on lmax (right side is guaranteed taller).
+
+Common Mistake
+Do NOT compare height[l] and height[r] → compare lmax and rmax.
+
+Time: O(N)
+Space: O(1)
+
+};
+
+
